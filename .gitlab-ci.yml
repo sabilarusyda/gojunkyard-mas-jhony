@@ -1,0 +1,21 @@
+image: golang:1.14
+
+cache:
+  key: vendor
+  paths:
+    - .cache/
+
+stages:
+  - Test
+
+before_script:
+  - mkdir -p .cache && export GOPATH="$CI_PROJECT_DIR/.cache"
+  - go mod download
+  - chmod -R 0755 .cache
+
+test:
+  stage: Test
+  script:
+    - go test ./... -race -cover
+  only:
+    - alpha
